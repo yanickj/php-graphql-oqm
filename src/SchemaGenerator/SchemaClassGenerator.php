@@ -7,6 +7,7 @@ use GraphQL\Enumeration\FieldTypeKindEnum;
 use GraphQL\SchemaGenerator\CodeGenerator\ArgumentsObjectClassBuilder;
 use GraphQL\SchemaGenerator\CodeGenerator\EnumObjectBuilder;
 use GraphQL\SchemaGenerator\CodeGenerator\InputObjectClassBuilder;
+use GraphQL\SchemaGenerator\CodeGenerator\MutationObjectClassBuilder;
 use GraphQL\SchemaGenerator\CodeGenerator\ObjectBuilderInterface;
 use GraphQL\SchemaGenerator\CodeGenerator\QueryObjectClassBuilder;
 use GraphQL\SchemaObject\QueryObject;
@@ -72,6 +73,25 @@ class SchemaClassGenerator
         //$rootObjectDescr = $objectArray['description'];
 
         $queryObjectBuilder = new QueryObjectClassBuilder($this->writeDir, $rootObjectName, $this->generationNamespace);
+        $this->generatedObjects[$queryTypeName] = true;
+        $this->appendQueryObjectFields($queryObjectBuilder, $rootObjectName, $objectArray['fields']);
+
+        $queryObjectBuilder->build();
+
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function generateRootMutationObject(): bool
+    {
+        $objectArray    = $this->schemaInspector->getMutationTypeSchema();
+        $rootObjectName = QueryObject::ROOT_QUERY_OBJECT_NAME;
+        $queryTypeName  = $objectArray['name'];
+        //$rootObjectDescr = $objectArray['description'];
+
+        $queryObjectBuilder = new MutationObjectClassBuilder($this->writeDir, $rootObjectName, $this->generationNamespace);
         $this->generatedObjects[$queryTypeName] = true;
         $this->appendQueryObjectFields($queryObjectBuilder, $rootObjectName, $objectArray['fields']);
 

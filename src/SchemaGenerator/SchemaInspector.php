@@ -86,6 +86,38 @@ QUERY;
     }
 
     /**
+     * @return array
+     */
+    public function getMutationTypeSchema(): array
+    {
+        $schemaQuery = "{
+  __schema{
+    mutationType{
+      name
+      kind
+      description
+      fields(includeDeprecated: true){
+        name
+        description
+        isDeprecated
+        deprecationReason
+        " . static::TYPE_SUB_QUERY . "
+        args{
+          name
+          description
+          defaultValue
+          " . static::TYPE_SUB_QUERY . "
+        }
+      }
+    }
+  }
+}";
+        $response = $this->client->runRawQuery($schemaQuery, true);
+
+        return $response->getData()['__schema']['mutationType'];
+    }
+
+    /**
      * @param string $objectName
      *
      * @return array

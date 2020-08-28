@@ -39,6 +39,7 @@ print "Generating schema objects from schema types\n";
 print "-------------------------------------------\n";
 
 $scanner->generateRootQueryObject();
+$scanner->generateRootMutationObject();
 
 print "-------------------------------------------\n";
 print "Schema objects generation complete\n";
